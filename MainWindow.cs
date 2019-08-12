@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -10,7 +8,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -20,10 +17,13 @@ namespace PDI
     {
         private Bitmap bitmap;
         private float[] imagePixels;
-        private float[][] rMask, gMask, bMask, nMask, yiqCM, rgbCM, brightCM;
+        private float[][] rMask, gMask, bMask, brightCM;
         private bool isYIQ = false;
         private bool isNeg = false;
         private bool act = false;
+
+        public Bitmap Bitmap { get => bitmap; set => bitmap = value; }
+
         //private float factorA = 1;
         //private float factorB = 1;
 
@@ -66,27 +66,6 @@ namespace PDI
                 new float[] {0, 0,  0,  1,  0},     // Unchange Alpha channel
                 new float[] {0, 0,  0,  0,  1}};    // Unchange W channel
 
-            nMask = new float[5][]{
-                new float[] {-1, 0,  0,  0,  0},     // Remove Red color
-                new float[] {0, -1,  0,  0,  0},     // Remove Green color
-                new float[] {0, 0,  -1,  0,  0},     // Unchange Blue color
-                new float[] {0, 0,   0,  1,  0},     // Unchange Alpha channel
-                new float[] {1, 1,   1,  0,  1}};    // Complement W channel
-
-            yiqCM = new float[5][]{
-                new float[5]{.299f, .587f, .114f, 0, 0},
-                new float[5]{ .596f, -.274f, -.322f, 0, 0},
-                new float[5]{ .211f, -.523f, .312f, 0, 0},
-                new float[5]{0, 0, 0, 1, 0},
-                new float[5]{0, 0, 0, 0, 1}};
-
-            rgbCM = new float[5][]{
-                new float[]{1, .956f, .621f, 0, 0},
-                new float[]{ 1, -.272f, -.647f, 0, 0},
-                new float[]{ 1, -1.106f, 1.703f, 0, 0},
-                new float[]{0, 0, 0, 1, 0},
-                new float[]{0, 0, 0, 0, 1}};
-
             brightCM = new float[5][]{
                 new float[]{1, 0, 0, 0, 0 },
                 new float[]{0, 1, 0, 0, 0 },
@@ -113,8 +92,8 @@ namespace PDI
             ResetState();
             if (openFileDialogImage.ShowDialog() == DialogResult.OK)
             {
-                bitmap = new Bitmap(openFileDialogImage.FileName);
-                imagePixels = GetPixelsFromBitmap(bitmap);
+                Bitmap = new Bitmap(openFileDialogImage.FileName);
+                imagePixels = GetPixelsFromBitmap(Bitmap);
 
                 // Collect trash
                 GC.Collect();
@@ -210,8 +189,8 @@ namespace PDI
             {
                 try
                 {
-                    int width = bitmap.Width;
-                    int height = bitmap.Height;
+                    int width = Bitmap.Width;
+                    int height = Bitmap.Height;
 
                     if (checkBoxYIQ.Checked && checkBoxNegative.Checked)
                     {
@@ -331,7 +310,7 @@ namespace PDI
                     //    factorA = factorB;
                     //}
 
-                    bitmap = GetBitmapFromPixels(imagePixels);
+                    Bitmap = GetBitmapFromPixels(imagePixels);
                 }
                 catch (ArgumentNullException ex)
                 {
@@ -394,13 +373,13 @@ namespace PDI
             {
                 try
                 {
-                    int width = bitmap.Width;
-                    int height = bitmap.Height;
+                    int width = Bitmap.Width;
+                    int height = Bitmap.Height;
 
                     attr.SetColorMatrix(new ColorMatrix(brightCM));
 
                     e.Graphics.DrawImage(
-                        bitmap,
+                        Bitmap,
                         new Rectangle(new Point(0, 0), pictureBoxRGB.Size),
                         0, 0,
                         width, height,
@@ -434,14 +413,14 @@ namespace PDI
             {
                 try
                 {
-                    int width = bitmap.Width;
-                    int height = bitmap.Height;
+                    int width = Bitmap.Width;
+                    int height = Bitmap.Height;
 
                     //attr.SetColorMatrix(new ColorMatrix(rMask)));
                     attr.SetColorMatrix(new ColorMatrix(MultiplyMatrix(rMask, brightCM)));
 
                     e.Graphics.DrawImage(
-                        bitmap,
+                        Bitmap,
                         new Rectangle(new Point(0, 0), pictureBoxR.Size),
                         0, 0,
                         width, height,
@@ -475,14 +454,14 @@ namespace PDI
             {
                 try
                 {
-                    int width = bitmap.Width;
-                    int height = bitmap.Height;
+                    int width = Bitmap.Width;
+                    int height = Bitmap.Height;
 
                     //attr.SetColorMatrix(new ColorMatrix(gMask)));
                     attr.SetColorMatrix(new ColorMatrix(MultiplyMatrix(gMask, brightCM)));
 
                     e.Graphics.DrawImage(
-                        bitmap,
+                        Bitmap,
                         new Rectangle(new Point(0, 0), pictureBoxG.Size),
                         0, 0,
                         width, height,
@@ -516,14 +495,14 @@ namespace PDI
             {
                 try
                 {
-                    int width = bitmap.Width;
-                    int height = bitmap.Height;
+                    int width = Bitmap.Width;
+                    int height = Bitmap.Height;
 
                     //attr.SetColorMatrix(new ColorMatrix(bMask));
                     attr.SetColorMatrix(new ColorMatrix(MultiplyMatrix(bMask, brightCM)));
 
                     e.Graphics.DrawImage(
-                        bitmap,
+                        Bitmap,
                         new Rectangle(new Point(0, 0), pictureBoxB.Size),
                         0, 0,
                         width, height,
@@ -670,8 +649,8 @@ namespace PDI
         private void ApplyFilterButton_Click(object sender, EventArgs e)
         {
             DataTable dt = (DataTable)bindingSource.DataSource;
-            imagePixels = Convolve(imagePixels, bitmap.Width, bitmap.Height, ConvertDataTableToMatrix(dt));
-            bitmap = GetBitmapFromPixels(imagePixels);
+            imagePixels = Convolve(imagePixels, Bitmap.Width, Bitmap.Height, ConvertDataTableToMatrix(dt));
+            Bitmap = GetBitmapFromPixels(imagePixels);
 
             pictureBoxRGB.Invalidate();
             pictureBoxR.Invalidate();
@@ -720,8 +699,8 @@ namespace PDI
         private void ApplyMedianButton_Click(object sender, EventArgs e)
         {
             int size = (int)(numericUpDownM.Value * numericUpDownN.Value);
-            bitmap = MedianFilter(bitmap, (int)(numericUpDownM.Value * numericUpDownN.Value));
-            imagePixels = GetPixelsFromBitmap(bitmap);
+            Bitmap = MedianFilter(Bitmap, size);
+            imagePixels = GetPixelsFromBitmap(Bitmap);
 
             pictureBoxRGB.Invalidate();
             pictureBoxR.Invalidate();
@@ -733,7 +712,7 @@ namespace PDI
         {
             int size = imagePixels.Length / 5;
             // 3bpp
-            Bitmap bmp = new Bitmap(bitmap.Width, bitmap.Height);
+            Bitmap bmp = new Bitmap(Bitmap.Width, Bitmap.Height);
 
             var data = bmp.LockBits(
                 new Rectangle(0, 0, bmp.Width, bmp.Height),
@@ -804,41 +783,35 @@ namespace PDI
 
             float red, green, blue;
 
-            int filterWidth = mask[0].Length;
-
-
-            int maskOffset = (filterWidth - 1) / 2;
-            int calcOffset = 0;
-
-            int pixelsOffset = 0;
+            int maskOffsetX = (mask[0].Length - 1) / 2;
+            int maskOffsetY = (mask.Length - 1) / 2;
             int stride = width * 5;
 
-            for (int offsetY = maskOffset; offsetY < height - maskOffset; offsetY++)
+            for (int offsetY = maskOffsetY; offsetY < height - maskOffsetY; offsetY++)
             {
-                for (int offsetX = maskOffset; offsetX < width - maskOffset; offsetX++)
+                for (int offsetX = maskOffsetX; offsetX < width - maskOffsetX; offsetX++)
                 {
                     red = 0;
                     green = 0;
                     blue = 0;
 
-                    pixelsOffset = offsetY * stride + offsetX * 5;
+                    int pixelsOffset = offsetY * stride + offsetX * 5;
 
-                    for (int maskY = -maskOffset; maskY <= maskOffset; maskY++)
+                    for (int maskY = -maskOffsetY; maskY <= maskOffsetY; maskY++)
                     {
-                        for (int maskX = -maskOffset; maskX <= maskOffset; maskX++)
+                        for (int maskX = -maskOffsetX; maskX <= maskOffsetX; maskX++)
                         {
 
-                            calcOffset = pixelsOffset + (maskX * 5) + (maskY * stride);
-
+                            int calcOffset = pixelsOffset + (maskX * 5) + (maskY * stride);
                             red += (imagePixels[calcOffset])
-                                * mask[maskY + maskOffset]
-                             [maskX + maskOffset];
+                                * mask[maskY + maskOffsetY]
+                             [maskX + maskOffsetX];
 
                             green += (imagePixels[calcOffset + 1])
-                                * mask[maskY + maskOffset][maskX + maskOffset];
+                                * mask[maskY + maskOffsetY][maskX + maskOffsetX];
 
                             blue += (imagePixels[calcOffset + 2])
-                                * mask[maskY + maskOffset][maskX + maskOffset];
+                                * mask[maskY + maskOffsetY][maskX + maskOffsetX];
                         }
                     }
 
@@ -875,10 +848,6 @@ namespace PDI
             sourceBitmap.UnlockBits(sourceData);
 
             int filterOffset = (matrixSize - 1) / 2;
-            int calcOffset = 0;
-
-            int byteOffset = 0;
-
             List<int> neighbourPixels = new List<int>();
             byte[] middlePixel;
 
@@ -889,11 +858,9 @@ namespace PDI
                 for (int offsetX = filterOffset; offsetX <
                     sourceBitmap.Width - filterOffset; offsetX++)
                 {
-                    byteOffset = offsetY *
-                                 sourceData.Stride +
-                                 offsetX * 4;
-
-
+                    int byteOffset = offsetY *
+                     sourceData.Stride +
+                     offsetX * 4;
                     neighbourPixels.Clear();
 
 
@@ -905,11 +872,9 @@ namespace PDI
                         {
 
 
-                            calcOffset = byteOffset +
-                                         (filterX * 4) +
-                                (filterY * sourceData.Stride);
-
-
+                            int calcOffset = byteOffset +
+                             (filterX * 4) +
+                    (filterY * sourceData.Stride);
                             neighbourPixels.Add(BitConverter.ToInt32(
                                              pixelBuffer, calcOffset));
                         }
