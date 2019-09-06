@@ -5,12 +5,31 @@ namespace PDI2
     class Trasform
     {
 
-        public float[] DCT(float[] matrix, int m, int n)
+        public float[] DCT(float[] matrix, int n)
         {
             float[] dct = new float[matrix.Length];
 
+            float ci, dct1, sum;
+            int i, j;
+            for(i = 0; i < n; i++)
+            {
+                if (i == 0)
+                    ci = 1 / (float)Math.Sqrt(n);
+                else
+                    ci = (float)Math.Sqrt(2) / (float)Math.Sqrt(n);
+
+                sum = 0;
+                for (j = 0; j < n; j++)
+                {
+                    dct1 = matrix[j] * (float)Math.Cos((2 * j + 1) * i * (float)Math.PI / (2 * n));
+                    sum += dct1;
+                }
+                dct[i] = ci * sum;
+            }
+
             return dct;
         }
+
         public float[] IDCT(float[] matrix)
         {
             float[] idct = new float[matrix.Length];
