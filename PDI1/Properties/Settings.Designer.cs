@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PDI.Properties
+namespace PDI1.Properties
 {
 
 

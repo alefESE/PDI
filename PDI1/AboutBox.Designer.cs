@@ -1,4 +1,4 @@
-﻿namespace PDI
+﻿namespace PDI1
 {
     partial class AboutBox
     {

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace PDI
+namespace PDI1
 {
     partial class AboutBox : Form
     {

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace PDI
+namespace PDI1
 {
     public class ExtendedToolStripSeparator : ToolStripSeparator
     {
