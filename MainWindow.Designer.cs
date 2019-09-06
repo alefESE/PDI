@@ -385,9 +385,9 @@ namespace PDI
             // 
             // applyFilterButton
             // 
-            this.applyFilterButton.Location = new System.Drawing.Point(132, 225);
+            this.applyFilterButton.Location = new System.Drawing.Point(155, 225);
             this.applyFilterButton.Name = "applyFilterButton";
-            this.applyFilterButton.Size = new System.Drawing.Size(98, 23);
+            this.applyFilterButton.Size = new System.Drawing.Size(75, 23);
             this.applyFilterButton.TabIndex = 8;
             this.applyFilterButton.Text = "Aplicar Filtro";
             this.applyFilterButton.UseVisualStyleBackColor = true;
