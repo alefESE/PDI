@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PDI1;
 
 namespace Testes_PDI
 {
@@ -10,7 +9,7 @@ namespace Testes_PDI
         [TestMethod]
         public void TestMultiplyMatrix()
         {
-            using (MainWindow m = new MainWindow())
+            using (PDI1.MainWindow m = new PDI1.MainWindow())
             {
                 float[][] yiqCM = new float[5][]{
                 new float[5]{.299f, .5959f, .2115f, 0, 0},
@@ -47,7 +46,7 @@ namespace Testes_PDI
         [TestMethod]
         public void TestYIQRGBConvertion()
         {
-            using (MainWindow m = new MainWindow())
+            using (PDI1.MainWindow m = new PDI1.MainWindow())
             {
                 m.InitializeMasks();
 
@@ -95,7 +94,7 @@ namespace Testes_PDI
         [TestMethod]
         public void TestNegativeRGB()
         {
-            using (MainWindow m = new MainWindow())
+            using (PDI1.MainWindow m = new PDI1.MainWindow())
             {
                 float[] pixels = new float[] { 100, 0, 0, 1, 1 };
 
@@ -112,5 +111,30 @@ namespace Testes_PDI
                 CollectionAssert.AreEqual(pixels, yiqNegExpected);
             }
         }
+
+        [TestMethod]
+        public void TestDCT1D()
+        {
+            float[] vector = { 3, - 1};
+            float[] waited = { 1.41421354f, 2.828427f };
+
+            PDI2.Transform t = new PDI2.Transform();
+            float[] res = t.DCT(vector, 2);
+
+            CollectionAssert.AreEqual(res, waited);
+        }
+
+        [TestMethod]
+        public void TestDCT2D()
+        {
+            float[,] matrix = { { 3, -1 }, { -1, -1 } };
+            float[,] waited = { { 0.000000f, 1.99999988f }, { 1.99999988f, 2.000000f } };
+
+            PDI2.Transform t = new PDI2.Transform();
+            float[,] res = t.DCT(matrix, 2, 2);
+            
+            CollectionAssert.AreEqual(res, waited);
+        }
+
     }
 }

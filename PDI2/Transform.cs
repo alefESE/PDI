@@ -2,7 +2,7 @@
 
 namespace PDI2
 {
-    class Trasform
+    public class Transform
     {
 
         public float[] DCT(float[] matrix, int n)
@@ -39,13 +39,13 @@ namespace PDI2
 
         public float[,] DCT(float[,] matrix, int m, int n)
         {
-            float[,] dct = new float[matrix.Length, matrix.Length];
+            float[,] dct = new float[m, n];
 
             float ci, cj, dct1, sum;
             int i, j, k, l;
-            for (i = 0; i < matrix.Length; i++)
+            for (i = 0; i < m; i++)
             {
-                for (j = 0; j < matrix.Length; j++)
+                for (j = 0; j < n; j++)
                 {
 
                     // ci and cj depends on frequency as well as 
