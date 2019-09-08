@@ -133,10 +133,10 @@ namespace Testes_PDI
                 { 100f, 110f, 120f},
                 { 130f, 140f, 150f} };
             float[,] waited = { 
-                { 309.84f, -31.62f, -0f},
-                { -163.65f, -0f, -0f},
+                { 310f, -32f, -0f},
+                { -164f, -0f, -0f},
                 { 0f, -0f, -0f},
-                { -14.76f, 0f, 0f},
+                { -15f, 0f, 0f},
                 { 0f, -0f, -0f} };
 
             PDI2.Transform t = new PDI2.Transform();

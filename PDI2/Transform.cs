@@ -110,9 +110,9 @@ namespace PDI2
                         cl = caux;
 
                     sum = 0;
-                    for (int m = 0; m < cols; m++)
+                    for (int n = 0; n < cols; n++)
                     {
-                        dct1 = matrix[i, m] * (float)Math.Cos((2 * m + 1) * (l * (float)Math.PI / aux));
+                        dct1 = matrix[i, n] * (float)Math.Cos((2 * n + 1) * (l * (float)Math.PI / aux));
                         sum += dct1;
                     }
                     dct[i, l] = cl * sum;
@@ -120,6 +120,7 @@ namespace PDI2
             });
 
             y = (float)Math.Sqrt(rows);
+            aux = (2 * rows);
             caux = x / y;
 
             // Vertical
@@ -140,9 +141,9 @@ namespace PDI2
                         ck =  caux;
 
                     sum = 0;
-                    for (int n = 0; n < rows; n++)
+                    for (int m = 0; m < rows; m++)
                     {
-                        dct1 = dct[n, j] * (float)Math.Cos((2 * n + 1) * (k * (float)Math.PI / aux));
+                        dct1 = dct[m, j] * (float)Math.Cos((2 * m + 1) * (k * (float)Math.PI / aux));
                         sum += dct1;
                     }
                     // OBS.: Round for test, remove after testing.
@@ -164,7 +165,6 @@ namespace PDI2
             float[,] idct = new float[rows, cols];
 
             float x = (float)Math.Sqrt(2);
-            float y = (float)Math.Sqrt(cols);
             float aux = (2 * cols);
 
             // Horizontal
@@ -191,7 +191,7 @@ namespace PDI2
                 }
             });
 
-            y = (float)Math.Sqrt(rows);
+            aux = (2 * rows);
             float cia = 2 / (float)Math.Sqrt(matrix.Length);
 
             // Vertical
