@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Testes_PDI
 {
@@ -115,11 +114,11 @@ namespace Testes_PDI
         [TestMethod]
         public void TestDCT1D()
         {
-            float[] vector = { 3, - 1};
-            float[] waited = { 1.41421354f, 2.828427f };
+            float[] vector = { 3, -1 };
+            float[] waited = { 1.414214f, 2.828427f };
 
             PDI2.Transform t = new PDI2.Transform();
-            float[] res = t.DCT(vector, 2);
+            float[] res = t.DCT(vector);
 
             CollectionAssert.AreEqual(res, waited);
         }
@@ -127,14 +126,58 @@ namespace Testes_PDI
         [TestMethod]
         public void TestDCT2D()
         {
-            float[,] matrix = { { 3, -1 }, { -1, -1 } };
-            float[,] waited = { { 0.000000f, 1.99999988f }, { 1.99999988f, 2.000000f } };
+            float[,] matrix = { 
+                { 10f, 20f, 30f},
+                { 40f, 50f, 60f},
+                { 70f, 80f, 90f},
+                { 100f, 110f, 120f},
+                { 130f, 140f, 150f} };
+            float[,] waited = { 
+                { 309.84f, -31.62f, -0f},
+                { -163.65f, -0f, -0f},
+                { 0f, -0f, -0f},
+                { -14.76f, 0f, 0f},
+                { 0f, -0f, -0f} };
 
             PDI2.Transform t = new PDI2.Transform();
-            float[,] res = t.DCT(matrix, 2, 2);
-            
+            float[,] res = t.DCT(matrix);
+
             CollectionAssert.AreEqual(res, waited);
         }
 
+        [TestMethod]
+        public void TestIDCT1D()
+        {
+            float[] waited = { 3, -1 };
+            float[] vector = { 1.414214f, 2.828427f };
+
+            PDI2.Transform t = new PDI2.Transform();
+            float[] res = t.IDCT(vector);
+
+            CollectionAssert.AreEqual(res, waited);
+        }
+
+        [TestMethod]
+        public void TestIDCT2D()
+        {
+            // Font: https://bit.ly/2kysMfv
+            float[,] waited = {
+                { 10f, 20f, 30f},
+                { 40f, 50f, 60f},
+                { 70f, 80f, 90f},
+                { 100f, 110f, 120f},
+                { 130f, 140f, 150f} };
+            float[,] matrix = {
+                { 309.84f, -31.62f, -0f},
+                { -163.65f, -0f, -0f},
+                { 0f, -0f, -0f},
+                { -14.76f, 0f, 0f},
+                { 0f, -0f, -0f} };
+
+            PDI2.Transform t = new PDI2.Transform();
+            float[,] res = t.IDCT(matrix);
+
+            CollectionAssert.AreEqual(res, waited);
+        }
     }
 }
