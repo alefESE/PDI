@@ -53,11 +53,11 @@ namespace PDI2
             }
             catch (NullReferenceException ex)
             {
-                Debug.WriteLine("");
+                Debug.WriteLine(ex.ToString());
             }
             catch (ArgumentNullException ex)
             {
-                Debug.WriteLine("");
+                Debug.WriteLine(ex.ToString());
             }
         }
     }
