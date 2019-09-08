@@ -5,179 +5,219 @@ namespace PDI2
 {
     public class Transform
     {
-
-        public float[] DCT(float[] matrix)
+        /// <summary>
+        /// Return a vector with DCT transformation of <paramref name="vector"/>
+        /// </summary>
+        /// <param name="vector">The vector to transform</param>
+        /// <returns>Vector with DCT elements</returns>
+        public float[] DCT(float[] vector)
         {
-            int n = matrix.Length;
-            float[] dct = new float[n];
+            int len = vector.Length;
+            float[] dct = new float[len];
 
             float x = (float)Math.Sqrt(2);
-            float y = (float)Math.Sqrt(n);
-            float cia = x / y;
-            float aux = 2 * n;
-            float ci, dct1, sum;
+            float y = (float)Math.Sqrt(len);
+            float ckaux = x / y;
+            float aux = 2 * len;
+            float ck, dct1, sum;
             
-            Parallel.For(0, n, (i) =>
+            // Parallel for, where each iteration calculate the dct of "k" element
+            Parallel.For(0, len, (k) =>
             {
-                if (i == 0)
-                    ci = 1 / y;
+                if (k == 0)
+                    ck = 1 / y;
                 else
-                    ci = cia;
+                    ck = ckaux;
 
                 sum = 0;
-                for (int j = 0; j < n; j++)
+                for (int n = 0; n < len; n++)
                 {
-                    dct1 = matrix[j] * (float)Math.Cos(((2.0f * j + 1.0f) / aux) * i * (float)Math.PI);
+                    dct1 = vector[n] * (float)Math.Cos(((2.0f * n + 1.0f) / aux) * k * (float)Math.PI);
                     sum += dct1;
                 }
-                dct[i] = (float)Math.Round(ci * sum, 6);
+                // OBS.: Round for test, remove after testing.
+                dct[k] = (float)Math.Round(ck * sum);
             });
 
             return dct;
         }
-
-        public float[] IDCT(float[] matrix)
+        /// <summary>
+        /// Return a vector with iDCT transformation of <paramref name="vector"/>
+        /// </summary>
+        /// <param name="vector">The vector to transform</param>
+        /// <returns>Vector with iDCT elements</returns>
+        public float[] IDCT(float[] vector)
         {
-            int n = matrix.Length;
-            float[] idct = new float[n];
+            int len = vector.Length;
+            float[] idct = new float[len];
 
             float x = (float)Math.Sqrt(2);
-            float y = (float)Math.Sqrt(n);
-            float cia = x / y;
-            float aux = 2 * n;
-            float ci, idct1, sum;
-            Parallel.For(0, n, (i) =>
+            float y = (float)Math.Sqrt(len);
+            float ckaux = x / y;
+            float aux = 2 * len;
+            float ck, idct1, sum;
+
+            // Parallel for, where each iteration calculate the idct of "n" element
+            Parallel.For(0, len, (n) =>
             {
-                if (i == 0)
-                    ci = 1 / y;
+                if (n == 0)
+                    ck = 1 / y;
                 else
-                    ci = cia;
+                    ck = ckaux;
 
                 sum = 0;
-                for (int j = 0; j < n; j++)
+                for (int k = 0; k < len; k++)
                 {
-                    idct1 = ci * matrix[j] * (float)Math.Cos((2 * j + 1) * i * (float)Math.PI / aux);
+                    idct1 = ck * vector[k] * (float)Math.Cos((2 * k + 1) * n * (float)Math.PI / aux);
                     sum += idct1;
                 }
-                idct[i] = (float)Math.Round(sum, 6);
+                // OBS.: Round for test, remove after testing.
+                idct[n] = (float)Math.Round(sum);
             });
 
             return idct;
         }
-        //TODO: implement a way that don't change source matrix with memory optimization
+        /// <summary>
+        /// Return a matrix with DCT transformation of <paramref name="matrix"/>
+        /// </summary>
+        /// <param name="matrix">The matrix to transform</param>
+        /// <returns>Matrix with DCT elements</returns>
         public float[,] DCT(float[,] matrix)
         {
-            int m = matrix.GetLength(0);
-            int n = matrix.GetLength(1);
-            float[,] dct = new float[m, n];
+            //TODO: implement a way that don't change source matrix with memory optimization
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+            float[,] dct = new float[rows, cols];
 
             float x = (float)Math.Sqrt(2);
-            float y = (float)Math.Sqrt(n);
-            float aux = (2 * n);
-            float cia = x / y;
+            float y = (float)Math.Sqrt(cols);
+            float aux = (2 * cols);
+            float caux = x / y;
 
             // Horizontal
-            Parallel.For(0, m, (i, state) =>
+            /* Parallel for, where each iteration calculate the dct1d of row "i":
+             * -> 00 01
+             * -> 10 11 
+             */
+            Parallel.For(0, rows, (i, state) =>
             {
-                float cj, dct1, sum;
-                for (int j = 0; j < n; j++)
+                float cl, dct1, sum;
+                for (int l = 0; l < cols; l++)
                 {
-                    if (j == 0)
-                        cj = 1 / y;
+                    if (l == 0)
+                        cl = 1 / y;
                     else
-                        cj = cia;
+                        cl = caux;
 
                     sum = 0;
-                    for (int k = 0; k < n; k++)
+                    for (int m = 0; m < cols; m++)
                     {
-                        dct1 = matrix[i, k] * (float)Math.Cos((2 * k + 1) * (j * (float)Math.PI / aux));
+                        dct1 = matrix[i, m] * (float)Math.Cos((2 * m + 1) * (l * (float)Math.PI / aux));
                         sum += dct1;
                     }
-                    dct[i, j] = cj * sum;
+                    dct[i, l] = cl * sum;
                 }
             });
 
-            y = (float)Math.Sqrt(m);
-            cia = x / y;
+            y = (float)Math.Sqrt(rows);
+            caux = x / y;
 
             // Vertical
-            Parallel.For(0, n, (j, state) =>
+            /* Parallel for, where each iteration calculate the dct1d of column "j":
+             * |  |
+             * v  v
+             * 00 01
+             * 10 11 
+             */
+            Parallel.For(0, cols, (j, state) =>
             {
-                float ci, dct1, sum;
-                for (int i = 0; i < m; i++)
+                float ck, dct1, sum;
+                for (int k = 0; k < rows; k++)
                 {
-                    if (i == 0)
-                        ci = 1 / y;
+                    if (k == 0)
+                        ck = 1 / y;
                     else
-                        ci =  cia;
+                        ck =  caux;
 
                     sum = 0;
-                    for (int k = 0; k < m; k++)
+                    for (int n = 0; n < rows; n++)
                     {
-                        dct1 = dct[k, j] * (float)Math.Cos((2 * k + 1) * (i * (float)Math.PI / aux));
+                        dct1 = dct[n, j] * (float)Math.Cos((2 * n + 1) * (k * (float)Math.PI / aux));
                         sum += dct1;
                     }
                     // OBS.: Round for test, remove after testing.
-                    matrix[i, j] = (float)Math.Round(ci * sum);
+                    matrix[k, j] = (float)Math.Round(ck * sum);
                 }
             });
             return matrix;
         }
-        //TODO: implement a way that don't change source matrix with memory optimization
+        /// <summary>
+        /// Return a matrix with iDCT transformation of <paramref name="matrix"/>
+        /// </summary>
+        /// <param name="matrix">The matrix to transform</param>
+        /// <returns>Matrix with iDCT elements</returns>
         public float[,] IDCT(float[,] matrix)
         {
-            int m = matrix.GetLength(0);
-            int n = matrix.GetLength(1);
-            float[,] idct = new float[m, n];
+            //TODO: implement a way that don't change source matrix with memory optimization
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+            float[,] idct = new float[rows, cols];
 
             float x = (float)Math.Sqrt(2);
-            float y = (float)Math.Sqrt(n);
-            float aux = (2 * n);
-            float cia = 2 / (float)Math.Sqrt(matrix.Length);
+            float y = (float)Math.Sqrt(cols);
+            float aux = (2 * cols);
 
             // Horizontal
-            Parallel.For(0, m, (i, state) =>
+            /* Parallel for, where each iteration calculate the dct1d of row "i":
+             * -> 00 01
+             * -> 10 11 
+             */
+            Parallel.For(0, rows, (i, state) =>
             {
-                float cj, idct1, sum;
-                for (int j = 0; j < n; j++)
+                float ck, idct1, sum;
+                for (int n = 0; n < cols; n++)
                 {
                     sum = 0;
-                    for (int k = 0; k < n; k++)
+                    for (int k = 0; k < cols; k++)
                     {
                         if (k == 0)
-                            cj = 1 / x;
+                            ck = 1 / x;
                         else
-                            cj = 1;
-                        idct1 = cj * matrix[i, k] * (float)Math.Cos((2 * j + 1) * k * (float)Math.PI / aux);
+                            ck = 1;
+                        idct1 = ck * matrix[i, k] * (float)Math.Cos((2 * n + 1) * k * (float)Math.PI / aux);
                         sum += idct1;
                     }
-                    idct[i, j] = sum;
+                    idct[i, n] = sum;
                 }
             });
 
-            x = (float)Math.Sqrt(2);
-            y = (float)Math.Sqrt(m);
-            aux = (2 * m);
-            cia = 2 / (float)Math.Sqrt(matrix.Length);
+            y = (float)Math.Sqrt(rows);
+            float cia = 2 / (float)Math.Sqrt(matrix.Length);
 
             // Vertical
-            Parallel.For(0, n, (j, state) =>
+            /* Parallel for, where each iteration calculate the dct1d of column "j":
+             * |  |
+             * v  v
+             * 00 01
+             * 10 11 
+             */
+            Parallel.For(0, cols, (j, state) =>
             {
-                float ci, idct1, sum;
-                for (int i = 0; i < m; i++)
+                float cl, idct1, sum;
+                for (int m = 0; m < rows; m++)
                 {
                     sum = 0;
-                    for (int k = 0; k < m; k++)
+                    for (int l = 0; l < rows; l++)
                     {
-                        if (k == 0)
-                            ci = 1 / x;
+                        if (l == 0)
+                            cl = 1 / x;
                         else
-                            ci = 1;
-                        idct1 = ci * idct[k, j] * (float)Math.Cos((2 * i + 1) * k * (float)Math.PI / aux);
+                            cl = 1;
+                        idct1 = cl * idct[l, j] * (float)Math.Cos((2 * m + 1) * l * (float)Math.PI / aux);
                         sum += idct1;
                     }
                     // OBS.: Round for test, remove after testing.
-                    matrix[i, j] = (float)Math.Round(cia * sum);
+                    matrix[m, j] = (float)Math.Round(cia * sum);
                 }
             });
 
