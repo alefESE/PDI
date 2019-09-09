@@ -39,24 +39,23 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.waveControl = new AudioUtils.WaveController();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.SuspendLayout();
@@ -95,6 +94,7 @@
             this.audioToolStripMenuItem.Name = "audioToolStripMenuItem";
             this.audioToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.audioToolStripMenuItem.Text = "Áudio...";
+            this.audioToolStripMenuItem.Click += new System.EventHandler(this.AudioToolStripMenuItem_Click);
             // 
             // imagemToolStripMenuItem
             // 
@@ -157,6 +157,15 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Áudio";
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(139, 32);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(41, 25);
+            this.button5.TabIndex = 2;
+            this.button5.Text = "IDCT";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(92, 32);
@@ -186,6 +195,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Imagem";
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(133, 19);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(47, 23);
+            this.button4.TabIndex = 1;
+            this.button4.Text = "IDCT";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(6, 19);
@@ -203,14 +221,6 @@
             this.label2.Size = new System.Drawing.Size(34, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Áudio";
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Location = new System.Drawing.Point(338, 48);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(251, 190);
-            this.pictureBox2.TabIndex = 5;
-            this.pictureBox2.TabStop = false;
             // 
             // pictureBox3
             // 
@@ -246,34 +256,25 @@
             this.label4.TabIndex = 9;
             this.label4.Text = "Transformada";
             // 
-            // button4
+            // waveControl
             // 
-            this.button4.Location = new System.Drawing.Point(133, 19);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(47, 23);
-            this.button4.TabIndex = 1;
-            this.button4.Text = "IDCT";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(139, 32);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(41, 25);
-            this.button5.TabIndex = 2;
-            this.button5.Text = "IDCT";
-            this.button5.UseVisualStyleBackColor = true;
+            this.waveControl.BackColor = System.Drawing.Color.Transparent;
+            this.waveControl.Filename = null;
+            this.waveControl.Location = new System.Drawing.Point(338, 48);
+            this.waveControl.Name = "waveControl";
+            this.waveControl.Size = new System.Drawing.Size(251, 190);
+            this.waveControl.TabIndex = 10;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 487);
+            this.Controls.Add(this.waveControl);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
@@ -288,7 +289,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.ResumeLayout(false);
@@ -297,6 +297,8 @@
         }
 
         #endregion
+
+        #region Private Components
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem arquivoToolStripMenuItem;
@@ -310,7 +312,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -322,7 +323,9 @@
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.OpenFileDialog openFileDialogImage = new System.Windows.Forms.OpenFileDialog();
-        private System.Drawing.Bitmap bitmap;
+        private AudioUtils.WaveController waveControl;
+
+        #endregion
     }
 }
 
