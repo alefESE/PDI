@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title9 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title10 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea13 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title13 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea14 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title14 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.arquivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -270,6 +270,7 @@
             // 
             // btnDCTAudio
             // 
+            this.btnDCTAudio.Enabled = false;
             this.btnDCTAudio.Location = new System.Drawing.Point(92, 32);
             this.btnDCTAudio.Name = "btnDCTAudio";
             this.btnDCTAudio.Size = new System.Drawing.Size(41, 25);
@@ -280,6 +281,7 @@
             // 
             // btnPlay
             // 
+            this.btnPlay.Enabled = false;
             this.btnPlay.Location = new System.Drawing.Point(6, 32);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(48, 25);
@@ -338,6 +340,7 @@
             // 
             // btnDCTImage
             // 
+            this.btnDCTImage.Enabled = false;
             this.btnDCTImage.Location = new System.Drawing.Point(80, 19);
             this.btnDCTImage.Name = "btnDCTImage";
             this.btnDCTImage.Size = new System.Drawing.Size(47, 23);
@@ -376,53 +379,53 @@
             // transformAudioChart
             // 
             this.transformAudioChart.BackColor = System.Drawing.Color.Transparent;
-            chartArea9.AxisX.LabelStyle.Enabled = false;
-            chartArea9.AxisX.MajorGrid.Enabled = false;
-            chartArea9.AxisX.ScrollBar.ButtonColor = System.Drawing.Color.Silver;
-            chartArea9.AxisY.LabelStyle.Enabled = false;
-            chartArea9.AxisY.MajorGrid.Enabled = false;
-            chartArea9.BackColor = System.Drawing.Color.Transparent;
-            chartArea9.CursorX.IsUserSelectionEnabled = true;
-            chartArea9.Name = "ChartArea1";
-            this.transformAudioChart.ChartAreas.Add(chartArea9);
+            chartArea13.AxisX.LabelStyle.Enabled = false;
+            chartArea13.AxisX.MajorGrid.Enabled = false;
+            chartArea13.AxisX.ScrollBar.ButtonColor = System.Drawing.Color.Silver;
+            chartArea13.AxisY.LabelStyle.Enabled = false;
+            chartArea13.AxisY.MajorGrid.Enabled = false;
+            chartArea13.BackColor = System.Drawing.Color.Transparent;
+            chartArea13.CursorX.IsUserSelectionEnabled = true;
+            chartArea13.Name = "ChartArea1";
+            this.transformAudioChart.ChartAreas.Add(chartArea13);
             this.transformAudioChart.Location = new System.Drawing.Point(338, 285);
             this.transformAudioChart.Name = "transformAudioChart";
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series9.Color = System.Drawing.Color.Blue;
-            series9.Name = "Frequencies";
-            this.transformAudioChart.Series.Add(series9);
+            series13.ChartArea = "ChartArea1";
+            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series13.Color = System.Drawing.Color.Blue;
+            series13.Name = "Frequencies";
+            this.transformAudioChart.Series.Add(series13);
             this.transformAudioChart.Size = new System.Drawing.Size(251, 190);
             this.transformAudioChart.TabIndex = 11;
             this.transformAudioChart.Text = "Transfom Audio";
-            title9.Name = "Title";
-            this.transformAudioChart.Titles.Add(title9);
+            title13.Name = "Title";
+            this.transformAudioChart.Titles.Add(title13);
             // 
             // originalAudioChart
             // 
             this.originalAudioChart.BackColor = System.Drawing.Color.Transparent;
-            chartArea10.AxisX.LabelStyle.Enabled = false;
-            chartArea10.AxisX.MajorGrid.Enabled = false;
-            chartArea10.AxisX.ScrollBar.ButtonColor = System.Drawing.Color.Silver;
-            chartArea10.AxisY.LabelStyle.Enabled = false;
-            chartArea10.AxisY.MajorGrid.Enabled = false;
-            chartArea10.BackColor = System.Drawing.Color.Transparent;
-            chartArea10.CursorX.IsUserSelectionEnabled = true;
-            chartArea10.Name = "ChartArea1";
-            this.originalAudioChart.ChartAreas.Add(chartArea10);
+            chartArea14.AxisX.LabelStyle.Enabled = false;
+            chartArea14.AxisX.MajorGrid.Enabled = false;
+            chartArea14.AxisX.ScrollBar.ButtonColor = System.Drawing.Color.Silver;
+            chartArea14.AxisY.LabelStyle.Enabled = false;
+            chartArea14.AxisY.MajorGrid.Enabled = false;
+            chartArea14.BackColor = System.Drawing.Color.Transparent;
+            chartArea14.CursorX.IsUserSelectionEnabled = true;
+            chartArea14.Name = "ChartArea1";
+            this.originalAudioChart.ChartAreas.Add(chartArea14);
             this.originalAudioChart.Location = new System.Drawing.Point(338, 48);
             this.originalAudioChart.Name = "originalAudioChart";
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series10.Color = System.Drawing.Color.Red;
-            series10.Legend = "Legend1";
-            series10.Name = "Frequencies";
-            this.originalAudioChart.Series.Add(series10);
+            series14.ChartArea = "ChartArea1";
+            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series14.Color = System.Drawing.Color.Red;
+            series14.Legend = "Legend1";
+            series14.Name = "Frequencies";
+            this.originalAudioChart.Series.Add(series14);
             this.originalAudioChart.Size = new System.Drawing.Size(251, 190);
             this.originalAudioChart.TabIndex = 12;
             this.originalAudioChart.Text = "Original Áudio";
-            title10.Name = "Title";
-            this.originalAudioChart.Titles.Add(title10);
+            title14.Name = "Title";
+            this.originalAudioChart.Titles.Add(title14);
             // 
             // dctPictureBox
             // 

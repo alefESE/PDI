@@ -58,6 +58,8 @@ namespace PDI2
                 GC.WaitForPendingFinalizers();
 
                 pictureBox1.Invalidate();
+
+                btnDCTImage.Enabled = true;
             }
         }
 
@@ -133,6 +135,10 @@ namespace PDI2
                     for (int x = 0; x < _originalWave.Length; x++)
                         originalAudioChart.Series["Frequencies"].Points.AddXY(x, _originalWave[x]);
                     originalAudioChart.Titles["Title"].Text = "N: " + _originalWave.Length;
+
+
+                    btnPlay.Enabled = true;
+                    btnDCTAudio.Enabled = true;
                 }
             }
         }
