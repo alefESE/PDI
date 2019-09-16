@@ -1,4 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Emgu.CV;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PDI2;
+using System;
+using System.Linq;
 
 namespace Testes_PDI
 {
@@ -114,11 +118,12 @@ namespace Testes_PDI
         [TestMethod]
         public void TestDCT1D()
         {
-            float[] vector = { 3, -1 };
-            float[] waited = { 1.414214f, 2.828427f };
+            // font: https://octave-online.net/
+            float[] vector = { 61, 41, 16, 2, 77, 6, 52, -99, 63, 82, 11, 80, 5, 39, 79, 64, 21, 97, 28, 33 };
+            float[] waited = { 214f, -14f, -26f, -13f, 6f, 63f, 8, -1f, 5f, 24f, 12f, 44f, -37f, -28f, 6f,
+                -60f, 26f, 35f, 49f, -38f };
 
-            PDI2.Transform t = new PDI2.Transform();
-            float[] res = t.DCT(vector);
+            float[]res = Transform.DCT(vector);
 
             CollectionAssert.AreEqual(res, waited);
         }
@@ -126,7 +131,7 @@ namespace Testes_PDI
         [TestMethod]
         public void TestDCT2D()
         {
-            float[,] matrix = { 
+            float[,] matrix = {
                 { 10f, 20f, 30f},
                 { 40f, 50f, 60f},
                 { 70f, 80f, 90f},
@@ -139,8 +144,7 @@ namespace Testes_PDI
                 { -15f, 0f, 0f},
                 { 0f, -0f, -0f} };
 
-            PDI2.Transform t = new PDI2.Transform();
-            float[,] res = t.DCT(matrix);
+            float[,] res = Transform.DCT(matrix);
 
             CollectionAssert.AreEqual(res, waited);
         }
@@ -148,11 +152,12 @@ namespace Testes_PDI
         [TestMethod]
         public void TestIDCT1D()
         {
-            float[] waited = { 3, -1 };
-            float[] vector = { 1.414214f, 2.828427f };
+            // font: https://octave-online.net/
+            float[] waited = { 61, 41, 16, 2, 77, 6, 52, 99, 63, 82, 11, 80, 6, 39, 80, 64, 21, 97, 28, 32 };
+            float[] vector = { 214f, -14f, -26f, -13f, 6f, 63f, 8, -1f, 5f, 24f, 12f, 44f, -37f, -28f, 6f,
+                -60f, 26f, 35f, 49f, -38f };
 
-            PDI2.Transform t = new PDI2.Transform();
-            float[] res = t.IDCT(vector);
+            float[] res = Transform.IDCT(vector);
 
             CollectionAssert.AreEqual(res, waited);
         }
@@ -174,8 +179,7 @@ namespace Testes_PDI
                 { -14.76f, 0f, 0f},
                 { 0f, -0f, -0f} };
 
-            PDI2.Transform t = new PDI2.Transform();
-            float[,] res = t.IDCT(matrix);
+            float[,] res = Transform.IDCT(matrix);
 
             CollectionAssert.AreEqual(res, waited);
         }

@@ -231,6 +231,11 @@ namespace AudioUtils
             get { return m_Riff; }
         }
 
+        public FileStream Stream
+        {
+            get { return m_FileStream; }
+        }
+
         private string m_Filepath;
         private FileInfo m_FileInfo;
         private FileStream m_FileStream;

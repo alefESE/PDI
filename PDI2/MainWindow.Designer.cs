@@ -28,6 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title9 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title10 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.arquivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,26 +45,38 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBoxOptimum = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnCompress = new System.Windows.Forms.Button();
+            this.numericNCompress = new System.Windows.Forms.NumericUpDown();
+            this.btnPlayIdct = new System.Windows.Forms.Button();
+            this.numericN = new System.Windows.Forms.NumericUpDown();
+            this.btnNFilter = new System.Windows.Forms.Button();
+            this.btnIDCTAudio = new System.Windows.Forms.Button();
+            this.btnDCTAudio = new System.Windows.Forms.Button();
+            this.btnPlay = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btnFilterImage = new System.Windows.Forms.Button();
+            this.numericNImage = new System.Windows.Forms.NumericUpDown();
+            this.btnIDCTImage = new System.Windows.Forms.Button();
+            this.btnDCTImage = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.waveControl = new AudioUtils.WaveController();
+            this.transformAudioChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.originalAudioChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.dctPictureBox = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericNCompress)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericN)).BeginInit();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericNImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.transformAudioChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.originalAudioChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dctPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -86,20 +105,20 @@
             this.audioToolStripMenuItem,
             this.imagemToolStripMenuItem});
             this.abrirToolStripMenuItem.Name = "abrirToolStripMenuItem";
-            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.abrirToolStripMenuItem.Text = "Abrir...";
             // 
             // audioToolStripMenuItem
             // 
             this.audioToolStripMenuItem.Name = "audioToolStripMenuItem";
-            this.audioToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.audioToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.audioToolStripMenuItem.Text = "Áudio...";
             this.audioToolStripMenuItem.Click += new System.EventHandler(this.AudioToolStripMenuItem_Click);
             // 
             // imagemToolStripMenuItem
             // 
             this.imagemToolStripMenuItem.Name = "imagemToolStripMenuItem";
-            this.imagemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.imagemToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.imagemToolStripMenuItem.Text = "Imagem...";
             this.imagemToolStripMenuItem.Click += new System.EventHandler(this.ImagemToolStripMenuItem_Click);
             // 
@@ -107,7 +126,7 @@
             // 
             this.sairToolStripMenuItem.Name = "sairToolStripMenuItem";
             this.sairToolStripMenuItem.ShortcutKeyDisplayString = "Alt+F4";
-            this.sairToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sairToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.sairToolStripMenuItem.Text = "Sair";
             this.sairToolStripMenuItem.Click += new System.EventHandler(this.SairToolStripMenuItem_Click);
             // 
@@ -136,6 +155,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBoxOptimum);
             this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Location = new System.Drawing.Point(595, 48);
@@ -145,73 +165,186 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Controles";
             // 
+            // checkBoxOptimum
+            // 
+            this.checkBoxOptimum.AutoSize = true;
+            this.checkBoxOptimum.Location = new System.Drawing.Point(134, 264);
+            this.checkBoxOptimum.Name = "checkBoxOptimum";
+            this.checkBoxOptimum.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxOptimum.TabIndex = 2;
+            this.checkBoxOptimum.Text = "Optimize";
+            this.checkBoxOptimum.UseVisualStyleBackColor = true;
+            // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.button5);
-            this.groupBox3.Controls.Add(this.button2);
-            this.groupBox3.Controls.Add(this.button1);
-            this.groupBox3.Location = new System.Drawing.Point(7, 74);
+            this.groupBox3.Controls.Add(this.btnCompress);
+            this.groupBox3.Controls.Add(this.numericNCompress);
+            this.groupBox3.Controls.Add(this.btnPlayIdct);
+            this.groupBox3.Controls.Add(this.numericN);
+            this.groupBox3.Controls.Add(this.btnNFilter);
+            this.groupBox3.Controls.Add(this.btnIDCTAudio);
+            this.groupBox3.Controls.Add(this.btnDCTAudio);
+            this.groupBox3.Controls.Add(this.btnPlay);
+            this.groupBox3.Location = new System.Drawing.Point(8, 112);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(186, 69);
+            this.groupBox3.Size = new System.Drawing.Size(186, 146);
             this.groupBox3.TabIndex = 1;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Áudio";
             // 
-            // button5
+            // btnCompress
             // 
-            this.button5.Location = new System.Drawing.Point(139, 32);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(41, 25);
-            this.button5.TabIndex = 2;
-            this.button5.Text = "IDCT";
-            this.button5.UseVisualStyleBackColor = true;
+            this.btnCompress.Enabled = false;
+            this.btnCompress.Location = new System.Drawing.Point(116, 117);
+            this.btnCompress.Name = "btnCompress";
+            this.btnCompress.Size = new System.Drawing.Size(64, 23);
+            this.btnCompress.TabIndex = 7;
+            this.btnCompress.Text = "Compress";
+            this.btnCompress.UseVisualStyleBackColor = true;
+            this.btnCompress.Click += new System.EventHandler(this.BtnCompress_Click);
             // 
-            // button2
+            // numericNCompress
             // 
-            this.button2.Location = new System.Drawing.Point(92, 32);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(41, 25);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "DCT";
-            this.button2.UseVisualStyleBackColor = true;
+            this.numericNCompress.DecimalPlaces = 1;
+            this.numericNCompress.Enabled = false;
+            this.numericNCompress.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericNCompress.Location = new System.Drawing.Point(54, 117);
+            this.numericNCompress.Maximum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.numericNCompress.Name = "numericNCompress";
+            this.numericNCompress.Size = new System.Drawing.Size(56, 20);
+            this.numericNCompress.TabIndex = 6;
             // 
-            // button1
+            // btnPlayIdct
             // 
-            this.button1.Location = new System.Drawing.Point(6, 32);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(48, 25);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Play";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnPlayIdct.Enabled = false;
+            this.btnPlayIdct.Location = new System.Drawing.Point(7, 87);
+            this.btnPlayIdct.Name = "btnPlayIdct";
+            this.btnPlayIdct.Size = new System.Drawing.Size(64, 23);
+            this.btnPlayIdct.TabIndex = 5;
+            this.btnPlayIdct.Text = "Play iDCT";
+            this.btnPlayIdct.UseVisualStyleBackColor = true;
+            this.btnPlayIdct.Click += new System.EventHandler(this.BtnPlayIdct_Click);
+            // 
+            // numericN
+            // 
+            this.numericN.Enabled = false;
+            this.numericN.Location = new System.Drawing.Point(77, 90);
+            this.numericN.Maximum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.numericN.Name = "numericN";
+            this.numericN.Size = new System.Drawing.Size(56, 20);
+            this.numericN.TabIndex = 4;
+            // 
+            // btnNFilter
+            // 
+            this.btnNFilter.Enabled = false;
+            this.btnNFilter.Location = new System.Drawing.Point(139, 87);
+            this.btnNFilter.Name = "btnNFilter";
+            this.btnNFilter.Size = new System.Drawing.Size(41, 23);
+            this.btnNFilter.TabIndex = 3;
+            this.btnNFilter.Text = "Filter";
+            this.btnNFilter.UseVisualStyleBackColor = true;
+            this.btnNFilter.Click += new System.EventHandler(this.BtnNFilter_Click);
+            // 
+            // btnIDCTAudio
+            // 
+            this.btnIDCTAudio.Enabled = false;
+            this.btnIDCTAudio.Location = new System.Drawing.Point(139, 32);
+            this.btnIDCTAudio.Name = "btnIDCTAudio";
+            this.btnIDCTAudio.Size = new System.Drawing.Size(41, 25);
+            this.btnIDCTAudio.TabIndex = 2;
+            this.btnIDCTAudio.Text = "IDCT";
+            this.btnIDCTAudio.UseVisualStyleBackColor = true;
+            this.btnIDCTAudio.Click += new System.EventHandler(this.BtnIDCTAudio_Click);
+            // 
+            // btnDCTAudio
+            // 
+            this.btnDCTAudio.Location = new System.Drawing.Point(92, 32);
+            this.btnDCTAudio.Name = "btnDCTAudio";
+            this.btnDCTAudio.Size = new System.Drawing.Size(41, 25);
+            this.btnDCTAudio.TabIndex = 1;
+            this.btnDCTAudio.Text = "DCT";
+            this.btnDCTAudio.UseVisualStyleBackColor = true;
+            this.btnDCTAudio.Click += new System.EventHandler(this.BtnDCTAudio_Click);
+            // 
+            // btnPlay
+            // 
+            this.btnPlay.Location = new System.Drawing.Point(6, 32);
+            this.btnPlay.Name = "btnPlay";
+            this.btnPlay.Size = new System.Drawing.Size(48, 25);
+            this.btnPlay.TabIndex = 0;
+            this.btnPlay.Text = "Play";
+            this.btnPlay.UseVisualStyleBackColor = true;
+            this.btnPlay.Click += new System.EventHandler(this.BtnPlay_Click);
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.button4);
-            this.groupBox2.Controls.Add(this.button3);
+            this.groupBox2.Controls.Add(this.btnFilterImage);
+            this.groupBox2.Controls.Add(this.numericNImage);
+            this.groupBox2.Controls.Add(this.btnIDCTImage);
+            this.groupBox2.Controls.Add(this.btnDCTImage);
             this.groupBox2.Location = new System.Drawing.Point(7, 20);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(186, 48);
+            this.groupBox2.Size = new System.Drawing.Size(186, 86);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Imagem";
             // 
-            // button4
+            // btnFilterImage
             // 
-            this.button4.Location = new System.Drawing.Point(133, 19);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(47, 23);
-            this.button4.TabIndex = 1;
-            this.button4.Text = "IDCT";
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnFilterImage.Enabled = false;
+            this.btnFilterImage.Location = new System.Drawing.Point(139, 57);
+            this.btnFilterImage.Name = "btnFilterImage";
+            this.btnFilterImage.Size = new System.Drawing.Size(41, 23);
+            this.btnFilterImage.TabIndex = 6;
+            this.btnFilterImage.Text = "Filter";
+            this.btnFilterImage.UseVisualStyleBackColor = true;
+            this.btnFilterImage.Click += new System.EventHandler(this.BtnFilterImage_Click);
             // 
-            // button3
+            // numericNImage
             // 
-            this.button3.Location = new System.Drawing.Point(6, 19);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(47, 23);
-            this.button3.TabIndex = 0;
-            this.button3.Text = "DCT";
-            this.button3.UseVisualStyleBackColor = true;
+            this.numericNImage.Enabled = false;
+            this.numericNImage.Location = new System.Drawing.Point(77, 60);
+            this.numericNImage.Maximum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.numericNImage.Name = "numericNImage";
+            this.numericNImage.Size = new System.Drawing.Size(56, 20);
+            this.numericNImage.TabIndex = 6;
+            // 
+            // btnIDCTImage
+            // 
+            this.btnIDCTImage.Enabled = false;
+            this.btnIDCTImage.Location = new System.Drawing.Point(133, 19);
+            this.btnIDCTImage.Name = "btnIDCTImage";
+            this.btnIDCTImage.Size = new System.Drawing.Size(47, 23);
+            this.btnIDCTImage.TabIndex = 1;
+            this.btnIDCTImage.Text = "IDCT";
+            this.btnIDCTImage.UseVisualStyleBackColor = true;
+            this.btnIDCTImage.Click += new System.EventHandler(this.BtnIDCTImage_Click);
+            // 
+            // btnDCTImage
+            // 
+            this.btnDCTImage.Location = new System.Drawing.Point(80, 19);
+            this.btnDCTImage.Name = "btnDCTImage";
+            this.btnDCTImage.Size = new System.Drawing.Size(47, 23);
+            this.btnDCTImage.TabIndex = 0;
+            this.btnDCTImage.Text = "DCT";
+            this.btnDCTImage.UseVisualStyleBackColor = true;
+            this.btnDCTImage.Click += new System.EventHandler(this.BtnDCTImage_Click);
             // 
             // label2
             // 
@@ -222,14 +355,6 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Áudio";
             // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Location = new System.Drawing.Point(12, 285);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(256, 190);
-            this.pictureBox3.TabIndex = 6;
-            this.pictureBox3.TabStop = false;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -238,14 +363,6 @@
             this.label3.Size = new System.Drawing.Size(72, 13);
             this.label3.TabIndex = 7;
             this.label3.Text = "Transformada";
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Location = new System.Drawing.Point(338, 285);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(251, 190);
-            this.pictureBox4.TabIndex = 8;
-            this.pictureBox4.TabStop = false;
             // 
             // label4
             // 
@@ -256,25 +373,75 @@
             this.label4.TabIndex = 9;
             this.label4.Text = "Transformada";
             // 
-            // waveControl
+            // transformAudioChart
             // 
-            this.waveControl.BackColor = System.Drawing.Color.Transparent;
-            this.waveControl.Filename = null;
-            this.waveControl.Location = new System.Drawing.Point(338, 48);
-            this.waveControl.Name = "waveControl";
-            this.waveControl.Size = new System.Drawing.Size(251, 190);
-            this.waveControl.TabIndex = 10;
+            this.transformAudioChart.BackColor = System.Drawing.Color.Transparent;
+            chartArea9.AxisX.LabelStyle.Enabled = false;
+            chartArea9.AxisX.MajorGrid.Enabled = false;
+            chartArea9.AxisX.ScrollBar.ButtonColor = System.Drawing.Color.Silver;
+            chartArea9.AxisY.LabelStyle.Enabled = false;
+            chartArea9.AxisY.MajorGrid.Enabled = false;
+            chartArea9.BackColor = System.Drawing.Color.Transparent;
+            chartArea9.CursorX.IsUserSelectionEnabled = true;
+            chartArea9.Name = "ChartArea1";
+            this.transformAudioChart.ChartAreas.Add(chartArea9);
+            this.transformAudioChart.Location = new System.Drawing.Point(338, 285);
+            this.transformAudioChart.Name = "transformAudioChart";
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series9.Color = System.Drawing.Color.Blue;
+            series9.Name = "Frequencies";
+            this.transformAudioChart.Series.Add(series9);
+            this.transformAudioChart.Size = new System.Drawing.Size(251, 190);
+            this.transformAudioChart.TabIndex = 11;
+            this.transformAudioChart.Text = "Transfom Audio";
+            title9.Name = "Title";
+            this.transformAudioChart.Titles.Add(title9);
+            // 
+            // originalAudioChart
+            // 
+            this.originalAudioChart.BackColor = System.Drawing.Color.Transparent;
+            chartArea10.AxisX.LabelStyle.Enabled = false;
+            chartArea10.AxisX.MajorGrid.Enabled = false;
+            chartArea10.AxisX.ScrollBar.ButtonColor = System.Drawing.Color.Silver;
+            chartArea10.AxisY.LabelStyle.Enabled = false;
+            chartArea10.AxisY.MajorGrid.Enabled = false;
+            chartArea10.BackColor = System.Drawing.Color.Transparent;
+            chartArea10.CursorX.IsUserSelectionEnabled = true;
+            chartArea10.Name = "ChartArea1";
+            this.originalAudioChart.ChartAreas.Add(chartArea10);
+            this.originalAudioChart.Location = new System.Drawing.Point(338, 48);
+            this.originalAudioChart.Name = "originalAudioChart";
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series10.Color = System.Drawing.Color.Red;
+            series10.Legend = "Legend1";
+            series10.Name = "Frequencies";
+            this.originalAudioChart.Series.Add(series10);
+            this.originalAudioChart.Size = new System.Drawing.Size(251, 190);
+            this.originalAudioChart.TabIndex = 12;
+            this.originalAudioChart.Text = "Original Áudio";
+            title10.Name = "Title";
+            this.originalAudioChart.Titles.Add(title10);
+            // 
+            // dctPictureBox
+            // 
+            this.dctPictureBox.Location = new System.Drawing.Point(12, 282);
+            this.dctPictureBox.Name = "dctPictureBox";
+            this.dctPictureBox.Size = new System.Drawing.Size(256, 193);
+            this.dctPictureBox.TabIndex = 3;
+            this.dctPictureBox.TabStop = false;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 487);
-            this.Controls.Add(this.waveControl);
+            this.Controls.Add(this.dctPictureBox);
+            this.Controls.Add(this.originalAudioChart);
+            this.Controls.Add(this.transformAudioChart);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
@@ -287,10 +454,15 @@
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericNCompress)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericN)).EndInit();
             this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericNImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.transformAudioChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.originalAudioChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dctPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -310,22 +482,30 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnPlay;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnDCTAudio;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.Button btnDCTImage;
+        private System.Windows.Forms.Button btnIDCTAudio;
+        private System.Windows.Forms.Button btnIDCTImage;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.OpenFileDialog openFileDialogImage = new System.Windows.Forms.OpenFileDialog();
-        private AudioUtils.WaveController waveControl;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
 
         #endregion
+        private System.Windows.Forms.DataVisualization.Charting.Chart transformAudioChart;
+        private System.Windows.Forms.DataVisualization.Charting.Chart originalAudioChart;
+        private System.Windows.Forms.Button btnNFilter;
+        private System.Windows.Forms.NumericUpDown numericN;
+        private System.Windows.Forms.Button btnPlayIdct;
+        private System.Windows.Forms.CheckBox checkBoxOptimum;
+        private System.Windows.Forms.PictureBox dctPictureBox;
+        private System.Windows.Forms.Button btnFilterImage;
+        private System.Windows.Forms.NumericUpDown numericNImage;
+        private System.Windows.Forms.Button btnCompress;
+        private System.Windows.Forms.NumericUpDown numericNCompress;
     }
 }
 
