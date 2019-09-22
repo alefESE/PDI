@@ -119,7 +119,8 @@ namespace Testes_PDI
         public void TestDCT1D()
         {
             // font: https://octave-online.net/
-            float[] vector = { 61, 41, 16, 2, 77, 6, 52, -99, 63, 82, 11, 80, 5, 39, 79, 64, 21, 97, 28, 33 };
+            //float[] vector = { 61, 41, 16, 2, 77, 6, 52, -99, 63, 82, 11, 80, 5, 39, 79, 64, 21, 97, 28, 33 };
+            float[] vector = new float[45498];
             float[] waited = { 214f, -14f, -26f, -13f, 6f, 63f, 8, -1f, 5f, 24f, 12f, 44f, -37f, -28f, 6f,
                 -60f, 26f, 35f, 49f, -38f };
 
@@ -131,12 +132,13 @@ namespace Testes_PDI
         [TestMethod]
         public void TestDCT2D()
         {
-            float[,] matrix = {
-                { 10f, 20f, 30f},
-                { 40f, 50f, 60f},
-                { 70f, 80f, 90f},
-                { 100f, 110f, 120f},
-                { 130f, 140f, 150f} };
+            //float[,] matrix = {
+            //    { 10f, 20f, 30f},
+            //    { 40f, 50f, 60f},
+            //    { 70f, 80f, 90f},
+            //    { 100f, 110f, 120f},
+            //    { 130f, 140f, 150f} };
+            float[,] matrix = new float[256, 256];
             float[,] waited = { 
                 { 310f, -32f, -0f},
                 { -164f, -0f, -0f},
@@ -154,8 +156,9 @@ namespace Testes_PDI
         {
             // font: https://octave-online.net/
             float[] waited = { 61, 41, 16, 2, 77, 6, 52, 99, 63, 82, 11, 80, 6, 39, 80, 64, 21, 97, 28, 32 };
-            float[] vector = { 214f, -14f, -26f, -13f, 6f, 63f, 8, -1f, 5f, 24f, 12f, 44f, -37f, -28f, 6f,
-                -60f, 26f, 35f, 49f, -38f };
+            //float[] vector = { 214f, -14f, -26f, -13f, 6f, 63f, 8, -1f, 5f, 24f, 12f, 44f, -37f, -28f, 6f,
+            //    -60f, 26f, 35f, 49f, -38f };
+            float[] vector = new float[45498];
 
             float[] res = Transform.IDCT(vector);
 
@@ -172,12 +175,13 @@ namespace Testes_PDI
                 { 70f, 80f, 90f},
                 { 100f, 110f, 120f},
                 { 130f, 140f, 150f} };
-            float[,] matrix = {
-                { 309.84f, -31.62f, -0f},
-                { -163.65f, -0f, -0f},
-                { 0f, -0f, -0f},
-                { -14.76f, 0f, 0f},
-                { 0f, -0f, -0f} };
+            //float[,] matrix = {
+            //    { 309.84f, -31.62f, -0f},
+            //    { -163.65f, -0f, -0f},
+            //    { 0f, -0f, -0f},
+            //    { -14.76f, 0f, 0f},
+            //    { 0f, -0f, -0f} };
+            float[,] matrix = new float[256, 256];
 
             float[,] res = Transform.IDCT(matrix);
 

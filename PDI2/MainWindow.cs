@@ -139,6 +139,8 @@ namespace PDI2
 
                     btnPlay.Enabled = true;
                     btnDCTAudio.Enabled = true;
+                    btnCompress.Enabled = true;
+                    numericNCompress.Enabled = true;
                 }
             }
         }
@@ -464,6 +466,12 @@ namespace PDI2
 
         private void BtnCompress_Click(object sender, EventArgs e)
         {
+            //if (_transformWave == null)
+            //{
+            //    _transformFile = _waveFile;
+            //    _transformWave = _originalWave;
+            //}
+                
             float c = Decimal.ToSingle(numericNCompress.Value);
             float[] clone = new float[_transformWave.Samples.Length];
             Buffer.BlockCopy(_transformWave.Samples, 0, clone, 0, _transformWave.Samples.Length);
