@@ -4,13 +4,13 @@ using System.Drawing;
 using Emgu.CV;
 using System.IO;
 using System;
+using System.Xml.Serialization;
 
 namespace PDI_Final
 {
     class FaceDetector
     {
         private CascadeClassifier _classifier;
-        private static readonly string _projectPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
 
         public FaceDetector(string xmlPath)
         {
@@ -25,7 +25,7 @@ namespace PDI_Final
             return _classifier.DetectMultiScale(image, scaleFactor, minNeighbors, minSize);
         }
 
-        private static List<Mat> CutFaces(Mat image, Rectangle[] facesCoord)
+        private List<Mat> CutFaces(Mat image, Rectangle[] facesCoord)
         {
             List<Mat> faces = new List<Mat>();
 
@@ -44,7 +44,7 @@ namespace PDI_Final
             return faces;
         }
 
-        private static List<Mat> Resize(List<Mat> images, Size? size = null)
+        private List<Mat> Resize(List<Mat> images, Size? size = null)
         {
             size = size ?? new Size(224, 224);
 
@@ -62,7 +62,7 @@ namespace PDI_Final
             return images_norm;
         }
 
-        private static List<Mat> NormalizeFaces(Mat image, Rectangle[] facesCoord)
+        public List<Mat> NormalizeFaces(Mat image, Rectangle[] facesCoord)
         {
             var faces = CutFaces(image, facesCoord);
             faces = Resize(faces);
@@ -70,52 +70,40 @@ namespace PDI_Final
             return faces;
         }
 
-        private static (List<Mat>, string[]) CollectDataset()
+        public (List<Mat>, string[], Dictionary<int, string>) CollectDataset(string rootPath, bool train = false)
         {
             var images = new List<Mat>();
             var labels = new List<string>();
-
-            var people = Directory.GetDirectories(_projectPath + Path.DirectorySeparatorChar + "people")
+            var labels_dic = new Dictionary<int, string>();
+            var aux = train ? "_allign" : "";
+            var people = Directory.GetDirectories(rootPath + Path.DirectorySeparatorChar + "people"+aux)
                 .Select((value, index) => new { index, value })
                 .ToDictionary(pair => pair.index, pair => Path.GetFileName(pair.value));
 
-            foreach (var person in people)
+            var mode = train ? Emgu.CV.CvEnum.ImreadModes.Grayscale : Emgu.CV.CvEnum.ImreadModes.Color;
+
+            for (int i = 0; i < people.Count; i++)
             {
-                foreach (var image in Directory.GetFiles(_projectPath + Path.DirectorySeparatorChar + "people"
-                    + Path.DirectorySeparatorChar + person.Value))
+                foreach (var image in Directory.GetFiles(rootPath + Path.DirectorySeparatorChar + "people"+aux
+                    + Path.DirectorySeparatorChar + people[i]))
                 {
-                    images.Add(CvInvoke.Imread(image));
-                    labels.Add(person.Value);
+                    images.Add(CvInvoke.Imread(image, mode));
+                    labels.Add(people[i]);
+                    labels_dic.Add(labels_dic.Count, people[i]);
                 }
             }
 
-            return (images, labels.ToArray());
+            return (images, labels.ToArray(), labels_dic);
         }
 
-        public static void Run(string xmlPath)
+        public string[] GetLabels(string rootPath)
         {
-            (var images, var labels) = CollectDataset();
-
-            if (!Directory.Exists(_projectPath + Path.DirectorySeparatorChar + "people_allign"))
-                Directory.CreateDirectory(_projectPath + Path.DirectorySeparatorChar + "people_allign");
-
-            for (int i = 0; i < images.Count; i++)
+            using (var stream = new StreamReader(rootPath + Path.DirectorySeparatorChar + "recognizers"
+                + Path.DirectorySeparatorChar + "labels.xml"))
             {
-                var detector = new FaceDetector(xmlPath);
-                var faces_coord = detector.Detect(images[i]);
-                var faces = NormalizeFaces(images[i], faces_coord);
-                for (int j = 0; j < faces.Count; j++)
-                {
-                    if (!Directory.Exists(_projectPath + Path.DirectorySeparatorChar + "people_allign"
-                        + Path.DirectorySeparatorChar + labels[i]))
-                        Directory.CreateDirectory(_projectPath + Path.DirectorySeparatorChar + "people_allign"
-                        + Path.DirectorySeparatorChar + labels[i]);
-
-                    CvInvoke.Imwrite(_projectPath + Path.DirectorySeparatorChar + "people_allign"
-                        + Path.DirectorySeparatorChar + labels[i] + Path.DirectorySeparatorChar
-                        + labels[i] + (i + j) + ".jpg", faces[j]);
-                }
-                    
+                var serializer = new XmlSerializer(typeof(string[]));
+                var labels = (string[])serializer.Deserialize(stream);
+                return labels;
             }
         }
     }
