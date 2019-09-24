@@ -159,7 +159,10 @@ namespace PDI_Final
         private void CheckBox2_CheckedChanged(object sender, EventArgs e)
         {
             if (!checkBox2.Checked)
+            {
                 _capture.Stop();
+                tempCount = 0;
+            }
             else
                 _capture.Start();
         }
