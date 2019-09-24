@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDI1", "PDI1\PDI1.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testes PDI", "Testes PDI\Testes PDI.csproj", "{9352DA40-E5EE-4BF7-A0E7-814A5460D933}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDI Final", "PDI Final\PDI Final.csproj", "{0292585E-EFF2-4284-8671-CA9D0D7FE614}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9352DA40-E5EE-4BF7-A0E7-814A5460D933}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9352DA40-E5EE-4BF7-A0E7-814A5460D933}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9352DA40-E5EE-4BF7-A0E7-814A5460D933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0292585E-EFF2-4284-8671-CA9D0D7FE614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0292585E-EFF2-4284-8671-CA9D0D7FE614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0292585E-EFF2-4284-8671-CA9D0D7FE614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0292585E-EFF2-4284-8671-CA9D0D7FE614}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
