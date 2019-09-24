@@ -90,7 +90,7 @@ namespace PDI_Final
 
                         var a = _recognizer.Predict(new Mat(_gray, roi));
                         _labels = _faceDetector.GetLabels(_projectPath);
-                        if (a.Distance >= 40)
+                        if (a.Distance >= 40 && a.Distance <= 95)
                             CvInvoke.PutText(_frame, string.Format("{0} {1:N2}%", _labels[a.Label], a.Distance), face.Location,
                                    Emgu.CV.CvEnum.FontFace.HersheySimplex, 1, new Emgu.CV.Structure.MCvScalar(255, 255, 255),
                                    2, Emgu.CV.CvEnum.LineType.AntiAlias);
