@@ -89,10 +89,10 @@ namespace PDI_Final
                         
                         var result = _recognizer.Predict(new Mat(_gray, roi));
                         _labels = _faceDetector.GetLabels(_projectPath);
-                        var label = result.Distance <= 84 ? _labels[result.Label] : "Unknown";
-                        var boxColor = result.Distance <= 84 ? new MCvScalar(0, 255, 0) : new MCvScalar(0, 0, 255);
+                        var label = result.Distance <=  100 ? _labels[result.Label] : "Unknown";
+                        var boxColor = result.Distance <= 100 ? new MCvScalar(0, 255, 0) : new MCvScalar(0, 0, 255);
 
-                        CvInvoke.PutText(_frame, label, face.Location,
+                        CvInvoke.PutText(_frame, string.Format("{0} {1:N}", label, result.Distance), face.Location,
                                Emgu.CV.CvEnum.FontFace.HersheySimplex, 1, new MCvScalar(255, 255, 255),
                                2, Emgu.CV.CvEnum.LineType.AntiAlias);
 
