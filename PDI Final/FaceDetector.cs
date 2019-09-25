@@ -21,8 +21,7 @@ namespace PDI_Final
         {
             var scaleFactor = 1.2f;
             var minNeighbors = 5;
-            var minSize = new Size(30, 30);
-            return _classifier.DetectMultiScale(image, scaleFactor, minNeighbors, minSize);
+            return _classifier.DetectMultiScale(image, scaleFactor, minNeighbors, Size.Empty);
         }
 
         private List<Mat> CutFaces(Mat image, Rectangle[] facesCoord)

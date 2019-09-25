@@ -1,4 +1,5 @@
 ﻿using Emgu.CV;
+using Emgu.CV.Structure;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,9 +15,9 @@ namespace PDI_Final
         private VideoCapture _capture;
         private Mat _frame;
         private Mat _gray;
-        private CascadeClassifier _faceClassifier;
         private static readonly string _projectPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
-        private static readonly string _xmlPath = _projectPath + Path.DirectorySeparatorChar + "haarcascade_frontalface_default.xml";
+        private static readonly string _xmlPath = _projectPath + Path.DirectorySeparatorChar + "cascades" 
+            + Path.DirectorySeparatorChar + "haarcascades" + Path.DirectorySeparatorChar + "haarcascade_frontalface_default.xml";
         private FaceDetector _faceDetector;
         private Emgu.CV.Face.FaceRecognizer _recognizer;
         private string[] _labels;
@@ -27,10 +28,8 @@ namespace PDI_Final
         public Form1()
         {
             InitializeComponent();
-            _faceDetector = new FaceDetector(_projectPath + Path.DirectorySeparatorChar + "haarcascade_frontalface_default.xml");
-            _faceClassifier = new CascadeClassifier(_projectPath + Path.DirectorySeparatorChar + "haarcascade_frontalface_default.xml");
-
-            _recognizer = new Emgu.CV.Face.LBPHFaceRecognizer();
+            _faceDetector = new FaceDetector(xmlPath: _xmlPath);
+            _recognizer = new Emgu.CV.Face.LBPHFaceRecognizer(1, 8, 8, 8, 2000);
 
             if (Directory.Exists(_projectPath + Path.DirectorySeparatorChar + "recognizers"))
                 _recognizer.Read(_projectPath + Path.DirectorySeparatorChar + "recognizers"
@@ -77,7 +76,7 @@ namespace PDI_Final
                 {
                     _capture.Retrieve(_frame, 0);
                     CvInvoke.CvtColor(_frame, _gray, Emgu.CV.CvEnum.ColorConversion.Rgb2Gray);
-                    var faces = _faceClassifier.DetectMultiScale(_gray, 1.1, 10, Size.Empty); //the actual face detection happens here
+                    var faces = _faceDetector.Detect(_gray);
                     foreach (var face in faces)
                     {
                         var w_rm = (int)(0.3 * face.Width / 2);
@@ -87,15 +86,17 @@ namespace PDI_Final
                                 width: face.Width - w_rm,
                                 height: face.Height
                                 );
-
+                        
                         var a = _recognizer.Predict(new Mat(_gray, roi));
                         _labels = _faceDetector.GetLabels(_projectPath);
-                        if (a.Distance >= 40 && a.Distance <= 95)
-                            CvInvoke.PutText(_frame, string.Format("{0} {1:N2}%", _labels[a.Label], a.Distance), face.Location,
-                                   Emgu.CV.CvEnum.FontFace.HersheySimplex, 1, new Emgu.CV.Structure.MCvScalar(255, 255, 255),
-                                   2, Emgu.CV.CvEnum.LineType.AntiAlias);
+                        var label = a.Distance <= 84 ? _labels[a.Label] : "Unknown";
+                        var boxColor = a.Distance <= 84 ? new MCvScalar(0, 255, 0) : new MCvScalar(0, 0, 255);
 
-                        CvInvoke.Rectangle(_frame, face, new Emgu.CV.Structure.MCvScalar(0, 255, 0), 1);
+                        CvInvoke.PutText(_frame, label, face.Location,
+                               Emgu.CV.CvEnum.FontFace.HersheySimplex, 1, new MCvScalar(255, 255, 255),
+                               2, Emgu.CV.CvEnum.LineType.AntiAlias);
+
+                        CvInvoke.Rectangle(_frame, face, boxColor, 1);
                     }
                     pictureBox1.Image = _frame.Bitmap;
                 }
@@ -106,8 +107,8 @@ namespace PDI_Final
         {
             (_images, _labels, _labels_dic) = _faceDetector.CollectDataset(_projectPath);
 
-            if (!Directory.Exists(_projectPath + Path.DirectorySeparatorChar + "people_allign"))
-                Directory.CreateDirectory(_projectPath + Path.DirectorySeparatorChar + "people_allign");
+            Directory.Delete(_projectPath + Path.DirectorySeparatorChar + "people_allign", true);
+            Directory.CreateDirectory(_projectPath + Path.DirectorySeparatorChar + "people_allign");
 
             for (int i = 0; i < _images.Count; i++)
             {
@@ -160,11 +161,19 @@ namespace PDI_Final
         {
             if (!checkBox2.Checked)
             {
+                checkBox1.Enabled = true;
+                button1.Enabled = true;
+                button2.Enabled = true;
                 _capture.Stop();
                 tempCount = 0;
             }
             else
+            {
+                checkBox1.Enabled = false;
+                button1.Enabled = false;
+                button2.Enabled = false;
                 _capture.Start();
+            }
         }
     }
 }
