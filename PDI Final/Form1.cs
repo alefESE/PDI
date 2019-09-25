@@ -16,24 +16,24 @@ namespace PDI_Final
         private Mat _frame;
         private Mat _gray;
         private static readonly string _projectPath = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
-        private static readonly string _xmlPath = _projectPath + Path.DirectorySeparatorChar + "cascades" 
-            + Path.DirectorySeparatorChar + "haarcascades" + Path.DirectorySeparatorChar + "haarcascade_frontalface_default.xml";
         private FaceDetector _faceDetector;
         private Emgu.CV.Face.FaceRecognizer _recognizer;
         private string[] _labels;
         private List<Mat> _images;
         private Dictionary<int, string> _labels_dic;
-        private int tempCount = 0;
+        private uint tempCount = 0;
 
         public Form1()
         {
             InitializeComponent();
-            _faceDetector = new FaceDetector(xmlPath: _xmlPath);
+            _faceDetector = new FaceDetector(_projectPath);
             _recognizer = new Emgu.CV.Face.LBPHFaceRecognizer(1, 8, 8, 8, 2000);
 
             if (Directory.Exists(_projectPath + Path.DirectorySeparatorChar + "recognizers"))
                 _recognizer.Read(_projectPath + Path.DirectorySeparatorChar + "recognizers"
                 + Path.DirectorySeparatorChar + "face-trainner.yml");
+
+
             if (!Directory.Exists(_projectPath + Path.DirectorySeparatorChar + "temp"))
                 Directory.CreateDirectory(_projectPath + Path.DirectorySeparatorChar + "temp");
 
@@ -87,16 +87,16 @@ namespace PDI_Final
                                 height: face.Height
                                 );
                         
-                        var a = _recognizer.Predict(new Mat(_gray, roi));
+                        var result = _recognizer.Predict(new Mat(_gray, roi));
                         _labels = _faceDetector.GetLabels(_projectPath);
-                        var label = a.Distance <= 84 ? _labels[a.Label] : "Unknown";
-                        var boxColor = a.Distance <= 84 ? new MCvScalar(0, 255, 0) : new MCvScalar(0, 0, 255);
+                        var label = result.Distance <= 84 ? _labels[result.Label] : "Unknown";
+                        var boxColor = result.Distance <= 84 ? new MCvScalar(0, 255, 0) : new MCvScalar(0, 0, 255);
 
                         CvInvoke.PutText(_frame, label, face.Location,
                                Emgu.CV.CvEnum.FontFace.HersheySimplex, 1, new MCvScalar(255, 255, 255),
                                2, Emgu.CV.CvEnum.LineType.AntiAlias);
 
-                        CvInvoke.Rectangle(_frame, face, boxColor, 1);
+                        CvInvoke.Rectangle(_frame, face, boxColor);
                     }
                     pictureBox1.Image = _frame.Bitmap;
                 }
@@ -107,21 +107,22 @@ namespace PDI_Final
         {
             (_images, _labels, _labels_dic) = _faceDetector.CollectDataset(_projectPath);
 
-            Directory.Delete(_projectPath + Path.DirectorySeparatorChar + "people_allign", true);
+            if (Directory.Exists(_projectPath + Path.DirectorySeparatorChar + "people_allign"))
+                Directory.Delete(_projectPath + Path.DirectorySeparatorChar + "people_allign", true);
+
             Directory.CreateDirectory(_projectPath + Path.DirectorySeparatorChar + "people_allign");
 
             for (int i = 0; i < _images.Count; i++)
             {
-                var detector = new FaceDetector(_xmlPath);
-                var faces_coord = detector.Detect(_images[i]);
-                var faces = detector.NormalizeFaces(_images[i], faces_coord);
+                var faces_coord = _faceDetector.Detect(_images[i]);
+                var faces = _faceDetector.NormalizeFaces(_images[i], faces_coord);
                 for (int j = 0; j < faces.Count; j++)
                 {
                     if (!Directory.Exists(_projectPath + Path.DirectorySeparatorChar + "people_allign"
                         + Path.DirectorySeparatorChar + _labels[i]))
                         Directory.CreateDirectory(_projectPath + Path.DirectorySeparatorChar + "people_allign"
                         + Path.DirectorySeparatorChar + _labels[i]);
-
+                    
                     CvInvoke.Imwrite(_projectPath + Path.DirectorySeparatorChar + "people_allign"
                         + Path.DirectorySeparatorChar + _labels[i] + Path.DirectorySeparatorChar
                         + _labels[i] + (i + j) + ".jpg", faces[j]);
