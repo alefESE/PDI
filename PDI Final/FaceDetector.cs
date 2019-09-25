@@ -11,10 +11,17 @@ namespace PDI_Final
     class FaceDetector
     {
         private CascadeClassifier _classifier;
+        private CascadeClassifier _rightEyeClassifier;
+        private CascadeClassifier _leftEyeClassifier;
 
-        public FaceDetector(string xmlPath)
+        public FaceDetector(string rootPath)
         {
-            _classifier = new CascadeClassifier(xmlPath);
+            _classifier = new CascadeClassifier(rootPath + Path.DirectorySeparatorChar + "cascades"
+                + Path.DirectorySeparatorChar + "haarcascades" + Path.DirectorySeparatorChar + "haarcascade_frontalface_default.xml");
+            _rightEyeClassifier = new CascadeClassifier(rootPath + Path.DirectorySeparatorChar + "cascades"
+            + Path.DirectorySeparatorChar + "haarcascades" + Path.DirectorySeparatorChar + "haarcascade_righteye_2splits.xml");
+            _leftEyeClassifier = new CascadeClassifier(rootPath + Path.DirectorySeparatorChar + "cascades"
+            + Path.DirectorySeparatorChar + "haarcascades" + Path.DirectorySeparatorChar + "haarcascade_lefteye_2splits.xml");
         }
 
         public Rectangle[] Detect(Mat image)
@@ -22,6 +29,46 @@ namespace PDI_Final
             var scaleFactor = 1.2f;
             var minNeighbors = 5;
             return _classifier.DetectMultiScale(image, scaleFactor, minNeighbors, Size.Empty);
+        }
+
+        private void Align(Mat image)
+        {
+
+            bool FLAG = false;
+            int height = image.Height / 2;
+            var roi = new Rectangle(0, 0, image.Width, height);
+            var upperFace = new Mat(image, roi);
+
+            var rightEyes = _rightEyeClassifier.DetectMultiScale(upperFace, 1.4, 4, new Size(4, 4));
+            var leftEyes = _leftEyeClassifier.DetectMultiScale(upperFace, 1.4, 4, new Size(4, 4));
+
+            foreach(var rightEye in rightEyes)
+            {
+                foreach(var leftEye in leftEyes)
+                {
+                    if(rightEye.X > (leftEye.X+leftEye.Width))
+                    {
+                        var deltaY = (leftEye.Y + leftEye.Height / 2) -
+                                     (rightEye.Y + rightEye.Height / 2);
+
+                        var deltaX = (leftEye.X + leftEye.Width / 2) -
+                                     (rightEye.X + rightEye.Width / 2);
+
+                        double degrees = (Math.Atan2(deltaY, deltaX) * 180) / Math.PI;
+
+                        degrees = 180 - degrees;
+                        var rot = new Mat();
+                        CvInvoke.GetRotationMatrix2D(new PointF(image.Width / 2, image.Height / 2), degrees, 1, rot);
+                        CvInvoke.WarpAffine(image, image, rot, image.Size);
+                        FLAG = true;
+                        break;
+                    }
+                }
+                if (FLAG == true)
+                {
+                    break;
+                }
+            }
         }
 
         private List<Mat> CutFaces(Mat image, Rectangle[] facesCoord)
@@ -37,6 +84,7 @@ namespace PDI_Final
                         width: faceCoord.Width - w_rm,
                         height: faceCoord.Height
                         );
+                Align(image);
                 faces.Add(new Mat(image, roi));
             }
 
